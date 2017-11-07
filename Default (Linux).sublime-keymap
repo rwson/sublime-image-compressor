@@ -1,0 +1,10 @@
+[{
+  "keys": ["ctrl+shift+i", "c"],
+  "command": "image_compress"
+}, {
+  "keys": ["ctrl+alt+i", "f"],
+  "command": "image_compress_config_project"
+}, {
+  "keys": ["ctrl+alt+i", "g"],
+  "command": "image_compress_set_global_plugin_options"
+}]

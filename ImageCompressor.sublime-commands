@@ -1,0 +1,10 @@
+[{
+  "caption": "ImageCompress",
+  "command": "image_compress"
+}, {
+  "caption": "ImageCompress: Init Project Config File",
+  "command": "imagecompress_config_project"
+}, {
+  "caption": "ImageCompress: Set Global Config",
+  "command": "imagecompress_set_global_plugin_options"
+}]

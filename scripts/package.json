@@ -1,0 +1,21 @@
+{
+  "name": "lib",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "co": "^4.6.0",
+    "css": "^2.2.1",
+    "mime": "^2.0.3",
+    "mkdirp": "^0.5.1",
+    "node-dir": "^0.1.17",
+    "tinify": "^1.5.0"
+  }
+}

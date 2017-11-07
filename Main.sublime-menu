@@ -1,0 +1,46 @@
+[
+{
+    "id": "tools",
+    "children": [
+    {
+        "id": "imagecompress_tools",
+        "caption": "Image Compress",
+        "children": [
+        {
+            "caption": "Compress Images",
+            "command": "image_compress"
+        },
+        {
+            "caption": "Create Project Config File",
+            "command": "image_compress_config_project"
+        },
+        {
+            "caption": "Set Global Options Options",
+            "command": "image_compress_set_global_plugin_options"
+        }]
+    }]
+},
+{
+    "id": "preferences",
+    "children": [
+    {
+        "id": "package-settings",
+        "children": [
+        {
+            "caption": "Image Compress",
+            "children": [
+            {
+                "caption": "Compress Images",
+                "command": "image_compress"
+            },
+            {
+                "caption": "Create Project Config File",
+                "command": "image_compress_config_project"
+            },
+            {
+                "caption": "Set Global Options Options",
+                "command": "image_compress_set_global_plugin_options"
+            }]
+        }]
+    }]
+}]

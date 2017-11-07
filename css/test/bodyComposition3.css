@@ -1,0 +1,72 @@
+.mobile-container .body-composition {
+	width: 100%;
+	margin-bottom: 0.66rem;
+	background: url(../assets/arrow-down.png) center no-repeat;
+}
+
+.mobile-container .body-composition .left-area {
+	width: 100%;
+	background: url(../assets2/arrow-down.png) center no-repeat;
+}
+
+.mobile-container .body-composition .right-area {
+	width: 100%;
+	background: url(../assets/arrow-b.png) center no-repeat;
+}
+
+.mobile-container .body-composition .part,
+.mobile-container .body-composition .right-part {
+	background: #f6dbd4;
+	padding: 9px;
+	margin: 5px 0 0 0;
+	background: url(../assets2/arrow-b.png) center no-repeat;
+}
+
+.mobile-container .body-composition .part-title {
+	font-size: 0.4rem;
+    padding: 0 0 10px;
+    color: #3c3c3c;
+    font-weight: normal;
+    background: url(../assets2/ico1.png) center no-repeat;
+}
+
+.mobile-container .body-composition .body-composition-table {
+	width: 100%;
+	background: url(../assets2/interveneReport/action3-step-2.png) center no-repeat;
+}
+
+.mobile-container .body-composition .body-composition-table td {
+	width: 1%;
+	height: 0.64rem;
+	text-align: center;
+	font-size: 0.24rem;
+	color: #fff;
+	vertical-align: middle;
+	background: #c84b2c;
+	border-right: 1px solid #f6dbd4;
+	border-bottom: 1px solid #f6dbd4;
+	background: url(../assets2/interveneReport/action3-step-1.png) center no-repeat;
+}
+
+.mobile-container .body-composition .body-composition-table tbody td {
+	background: #fff;
+	color: #3c3c3c;
+	background: url(../assets2/interveneReport/action3-step-3.png) center no-repeat;
+}
+
+.mobile-container .body-composition .body-composition-table td:last-child {
+	border-right: none;
+	background: url(../assets/interveneReport/action3-step-3.png) center no-repeat;
+}
+
+.mobile-container .body-composition .body-composition-table thead td:nth-of-type(2n + 1) {
+	background: #e95935;
+	background: url(../assets/interveneReport/action3-step-3.png) center no-repeat;
+}
+
+@media screen and (max-width: 300px) {
+	.mobile-container .body-composition .selector-each .checked i {
+		background: url(../assets/interveneReport/action3-step-2.png) center no-repeat;
+		background-size: 100%;
+	}
+}

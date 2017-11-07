@@ -1,0 +1,12 @@
+{
+	"key": "7_VggZjp-jioUaHvZiJqVD-FvpnZC1Yk",
+	"source": [
+		"assets2",
+		"assets"
+	],
+	"outputDir": "tinyed",
+	"prefix": "tinyed",
+	"injectCssUrl": true,
+	"injectMaxSize": 8192,
+	"cssDir": "css"
+}
