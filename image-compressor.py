@@ -29,20 +29,20 @@ class ImageCompressCommand(sublime_plugin.TextCommand):
 
 class ImageCompressSetGlobalPluginOptionsCommand(sublime_plugin.TextCommand):
   def run(self, edit):
-    PluginUtils.open_sublime_settings()
+    PluginUtils.open_sublime_settings(self.view.window())
 
-class ImagecompressConfigProjectCommand(sublime_plugin.TextCommand):
+class ImageCompressConfigProjectCommand(sublime_plugin.TextCommand):
   def run(self, edit):
     currentDir = PluginUtils.get_active_project_path()
-    PluginUtils.create_config_file_from_template(currentDir)
+    PluginUtils.create_config_file_from_template(currentDir, self.view.window())
 
 class PluginUtils:
   @staticmethod
   def load_config(base):
+    args = ""
     try:
-      # cfg_file_path = base + "/" + CONFIG_FILE
-      args = ""
-      fs = open(PLUGIN_FOLDER + "/" + CONFIG_FILE, "r")
+      # 先读取项目根目录的配置文件
+      fs = open(base + "/" + CONFIG_FILE, "r")
       stream = fs.read()
       data = json.loads(stream)
       keys = data.keys()
@@ -53,24 +53,34 @@ class PluginUtils:
         args += " --" + key + "=" + str(val)
       return args
     except e:
-      # print("catch "*30)
-      # print(str(e))
-      # print("catch "*30)
-      return ""
+      fs = open(PLUGIN_FOLDER + "/" + CONFIG_FILE, "r")
+      stream = fs.read()
+      data = json.loads(stream)
+      keys = data.keys()
+      for key in keys:
+        val = data[key]
+        if isinstance(val, list):
+          val = "-compress-config-split-".join(val)
+        args += " --" + key + "=" + str(val)
+      return args
 
   @staticmethod
   def get_pref(key):
     return sublime.load_settings(SETTINGS_FILE).get(key)
 
   @staticmethod
+  def get_setting_key():
+    return sublime.load_settings(SETTINGS_FILE).get("key")
+
+  @staticmethod
   def open_sublime_settings(window):
     window.open_file(PLUGIN_FOLDER + "/" + SETTINGS_FILE)
 
   @staticmethod
-  def create_config_file_from_template(target):
+  def create_config_file_from_template(target, window):
     PLUGIN_CONFIG_FILE = PLUGIN_FOLDER + "/" + CONFIG_FILE
     TARGET_CONFIG_FILE = target + "/" + CONFIG_FILE
-    window.open_file(PLUGIN_FOLDER + "/" + SETTINGS_FILE)
+    window.open_file(TARGET_CONFIG_FILE)
 
   @staticmethod
   def get_node_path():
@@ -108,5 +118,5 @@ class PluginUtils:
           startupinfo=startupinfo).communicate()[0]
     else:
       run = " ".join(cmd)
-      # print(run)
-      res = subprocess.check_output(run, stderr=subprocess.STDOUT, shell=True, env=os.environ)
+      # res = subprocess.check_output(run, stderr=subprocess.STDOUT, shell=True, env=os.environ)
+      res = subprocess.call(run, stderr=subprocess.STDOUT, shell=True, env=os.environ)

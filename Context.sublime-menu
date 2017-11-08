@@ -5,9 +5,9 @@
     "command": "image_compress"
   }, {
     "caption": "Create Project Config File",
-    "command": "image_compress_config_project"
+    "command": "imagecompress_config_project"
   }, {
     "caption": "Set Global Options Options",
-    "command": "image_compress_set_global_plugin_options"
+    "command": "imagecompress_set_global_plugin_options"
   }]
 }]

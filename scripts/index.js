@@ -64,18 +64,10 @@ const fstat = filePath => fs.statSync(filePath);
 
 //  把文件转换成base64编码
 const toBase64 = filePath => {
-    const buffer = fs.readFileSync(filePath);
-    return buffer.toString("base64");
-};
-
-const toBase64Mime = ({ sourceUrl }) => {
-    const extname = path.extname(sourceUrl),
+    const buffer = fs.readFileSync(filePath),
+        extname = path.extname(filePath),
         type = mime.getType(extname.slice(1));
-    const buffer = fs.readFileSync(sourceUrl);
-    return {
-        base64: `data:${type};base64,${buffer.toString("base64")}`,
-        sourceUrl
-    };
+    return `data:${type};base64,${buffer.toString("base64")}`;
 };
 
 //  把一个数组按照20个每项做子项目拆分成二级数组
@@ -258,61 +250,33 @@ function init({
 
     co(function*() {
         try {
-            // for (let i of source) {
-            //     tmp = yield dir.promiseFiles(path.resolve(i));
-            //     filesList = [].concat.call(filesList, tmp.filter(file => isImageFile(file)));
-            // }
+            for (let i of source) {
+                tmp = yield dir.promiseFiles(path.resolve(i));
+                filesList = [].concat.call(filesList, tmp.filter(file => isImageFile(file)));
+            }
 
-            // for (tmp of filesList) {
-            //     basename = path.basename(tmp);
-            //     relativePath = tmp.replace(currentDir, "").replace(basename, "");
-            //     finalPath = path.join(distPath, relativePath);
-            //     isExist = folderExist(finalPath);
-            //     if (!isExist) {
-            //         mkdirp.sync(finalPath);
-            //     }
-            //     distUrl = path.join(finalPath, basename);
-
-            //     const res = yield promiseifyToFile(tmp, distUrl);
-
-            //     if (injectCssUrl) {
-            //         fStat = fstat(distUrl);
-            //         if (fStat.size <= injectMaxSize) {
-            //             replaceList.push({
-            //                 sourceUrl: tmp,
-            //                 base64: toBase64(res)
-            //             });
-            //         }
-            //     }
-            // }
-
-            replaceList = [{
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets2/arrow-b.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAIBAMAAAA/ygPCAAAAG1BMVEUAAADISyzISyzISyzISyzISyzISyzISyzISywpo66/AAAACHRSTlMA9dWgKQpfXtIoDd8AAAA0SURBVAjXY2BgYE9gAAFHERDJqtEUAKSYOzoMgFRFR0cbAwOLREdHowNDUAcQqDJYgKhmAOk7DGxmS1ynAAAAAElFTkSuQmCC'
-                },
-                {
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets2/arrow-down.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAI8AAABACAMAAAAUA9TAAAAAkFBMVEUAAABBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUG1GTnwAAAAL3RSTlMA+wMH7/fZ6BJ2HRi/JF23p/PfsMZXNQ4KbEYq49LNjoFBiHlPSTmeMZQ9m3JloB1oNusAAAMNSURBVGjezdkJlqowEAXQCoR5EhRwRAXFuWv/u/t9ejitNpLSBPrfBXjIs15MEL7lQb3e29C/WRqm6caFa1rgDPzEWgyXtQ590uvliCGiETmBBt/symT4aX6YQX+ywRy/MPP8HcV+yPDHIhxDP8aXOV7hzucDuT7e4KcA+hDsON7gHwmNT3ivSLuPSN8UeI+HADC18Jf40HVE3tLC3wY5aAdsUqRdFk2bRtiEbyAzsVG87K5otsOx2QEm+Eix6SiibGjgAxwqfIh3MkV5aOJj4GCLkfopCt5ifPl5kC9dtS1PR9gKztiKKZ0it4yxVQIbju0sZRFpW59huwrsIYqM1ETkORYKmBnA5Kd8nU5RNmQostMB3ALFfNmI8ouJQuYR3h1NFOOrACTMdgbhcdbwYU15IOZvtZdbHhYoZk7hy3GBBFbpvtpyTlhvsb7aNA8xEvhb/ZXf8hGKxbeLHYe0iFYePMmuEhQrwvuVBidOmqKprrzlGO/uy0KPaP5MROMJpSrmZdxcylNMimitkVtO+EAj2kMD9VOkp5RwrLMtu28hiwgRuQdLelejR+R4opb7KMZLcdKzQUyK6Nja8pWFqOjgkIcJEiTV47XVlJbT78F7uSnKL5RwzFAHqpy0b+DcsRu/cMrP1SCDZ+xJU2RE9X1E43RBWkkucYBqkdxF5C45it0sgx6RQYlomGnXJ3aJ/ZQ4RfSIvIoyOaOp9vr7NIaU2aw/Wx4RAo2XMgdfm1i0iQ32JUGxRajLXlNi0hRtKdPGdjOQZU/mSEDaAt9jVCCjLJ1+0JFnOwlKsxwblKmHkhExn9JyOvssFREvXVBLOwoiknjP1vMU8UEAP5RGhC8wu/tDxKuejsgYCFouGVH03BQl5xwE5N+60QkvRvK0dcSQxio96IG3miNFIbjrKYzIF0fEiQcd9RHJH3TkadPWiNjbDHrmrayWgw655d3/yYcsyuBPuGVTRFZFb7nyiEbs13VGouXy3BXHa0bpwp/St75xFU6qw1/zJr7x9TSOC/8DN3VO/lsVBiDtH9GQd7vYwuADAAAAAElFTkSuQmCC'
-                },
-                {
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets2/arrow.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAIBAMAAAA/ygPCAAAAGFBMVEUAAADISyzISyzISyzISyzISyzISyzISyxMRic8AAAAB3RSTlMA9dahXyoKCwfa0AAAADZJREFUCNdjMC8HgmKGJBClxsAqXl5eGMDA4F5eXsLAwMBcXm4ApNjUixIYgCBQlAEEWBwYGACamQspOtDUrgAAAABJRU5ErkJggg=='
-                },
-                {
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets/arrow-b.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAIBAMAAAA/ygPCAAAAG1BMVEUAAADISyzISyzISyzISyzISyzISyzISyzISywpo66/AAAACHRSTlMA9dWgKQpfXtIoDd8AAAA0SURBVAjXY2BgYE9gAAFHERDJqtEUAKSYOzoMgFRFR0cbAwOLREdHowNDUAcQqDJYgKhmAOk7DGxmS1ynAAAAAElFTkSuQmCC'
-                },
-                {
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets/arrow-down.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAI8AAABACAMAAAAUA9TAAAAAkFBMVEUAAABBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUG1GTnwAAAAL3RSTlMA+wMH7/fZ6BJ2HRi/JF23p/PfsMZXNQ4KbEYq49LNjoFBiHlPSTmeMZQ9m3JloB1oNusAAAMNSURBVGjezdkJlqowEAXQCoR5EhRwRAXFuWv/u/t9ejitNpLSBPrfBXjIs15MEL7lQb3e29C/WRqm6caFa1rgDPzEWgyXtQ590uvliCGiETmBBt/symT4aX6YQX+ywRy/MPP8HcV+yPDHIhxDP8aXOV7hzucDuT7e4KcA+hDsON7gHwmNT3ivSLuPSN8UeI+HADC18Jf40HVE3tLC3wY5aAdsUqRdFk2bRtiEbyAzsVG87K5otsOx2QEm+Eix6SiibGjgAxwqfIh3MkV5aOJj4GCLkfopCt5ifPl5kC9dtS1PR9gKztiKKZ0it4yxVQIbju0sZRFpW59huwrsIYqM1ETkORYKmBnA5Kd8nU5RNmQostMB3ALFfNmI8ouJQuYR3h1NFOOrACTMdgbhcdbwYU15IOZvtZdbHhYoZk7hy3GBBFbpvtpyTlhvsb7aNA8xEvhb/ZXf8hGKxbeLHYe0iFYePMmuEhQrwvuVBidOmqKprrzlGO/uy0KPaP5MROMJpSrmZdxcylNMimitkVtO+EAj2kMD9VOkp5RwrLMtu28hiwgRuQdLelejR+R4opb7KMZLcdKzQUyK6Nja8pWFqOjgkIcJEiTV47XVlJbT78F7uSnKL5RwzFAHqpy0b+DcsRu/cMrP1SCDZ+xJU2RE9X1E43RBWkkucYBqkdxF5C45it0sgx6RQYlomGnXJ3aJ/ZQ4RfSIvIoyOaOp9vr7NIaU2aw/Wx4RAo2XMgdfm1i0iQ32JUGxRajLXlNi0hRtKdPGdjOQZU/mSEDaAt9jVCCjLJ1+0JFnOwlKsxwblKmHkhExn9JyOvssFREvXVBLOwoiknjP1vMU8UEAP5RGhC8wu/tDxKuejsgYCFouGVH03BQl5xwE5N+60QkvRvK0dcSQxio96IG3miNFIbjrKYzIF0fEiQcd9RHJH3TkadPWiNjbDHrmrayWgw655d3/yYcsyuBPuGVTRFZFb7nyiEbs13VGouXy3BXHa0bpwp/St75xFU6qw1/zJr7x9TSOC/8DN3VO/lsVBiDtH9GQd7vYwuADAAAAAElFTkSuQmCC'
-                },
-                {
-                    sourceUrl: '/Users/Mrson/Library/Application Support/Sublime Text 3/Packages/sublime-image-compressor/assets/arrow.png',
-                    base64: 'iVBORw0KGgoAAAANSUhEUgAAAAwAAAAIBAMAAAA/ygPCAAAAGFBMVEUAAADISyzISyzISyzISyzISyzISyzISyxMRic8AAAAB3RSTlMA9dahXyoKCwfa0AAAADZJREFUCNdjMC8HgmKGJBClxsAqXl5eGMDA4F5eXsLAwMBcXm4ApNjUixIYgCBQlAEEWBwYGACamQspOtDUrgAAAABJRU5ErkJggg=='
+            for (tmp of filesList) {
+                basename = path.basename(tmp);
+                relativePath = tmp.replace(currentDir, "").replace(basename, "");
+                finalPath = path.join(distPath, relativePath);
+                isExist = folderExist(finalPath);
+                if (!isExist) {
+                    mkdirp.sync(finalPath);
                 }
-            ];
+                distUrl = path.join(finalPath, basename);
 
-            replaceList = replaceList.map((item) => toBase64Mime(item));
+                const res = yield promiseifyToFile(tmp, distUrl);
+
+                if (injectCssUrl) {
+                    fStat = fstat(distUrl);
+                    if (fStat.size <= injectMaxSize) {
+                        replaceList.push({
+                            sourceUrl: tmp,
+                            base64: toBase64(res)
+                        });
+                    }
+                }
+            }
             if (injectCssUrl && replaceList.length) {
                 for (let i of cssDir) {
                     tmp = yield dir.promiseFiles(path.resolve(i));
@@ -321,10 +285,7 @@ function init({
                 cssFileList = listCssAST(cssFileList);
                 replaceCss(cssFileList, replaceList);
             }
-
-            process.exit(1);
         } catch (e) {
-            console.log(e);
             fs.writeFileSync(path.join(__dirname, "log.txt"), JSON.stringify({
                 e
             }));
